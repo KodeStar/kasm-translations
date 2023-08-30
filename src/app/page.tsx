@@ -1,20 +1,15 @@
 "use client"
 
 import { useState, useEffect, SetStateAction, ChangeEvent, JSXElementConstructor, Key, PromiseLikeOfReactNode, ReactElement, ReactNode } from 'react'
+import config from '../../next.config'
 
-async function getData(path: string) {
-  const res = await fetch('/locales/' + path + '/common.json')
-  if (!res.ok) {
-    throw new Error('Failed to fetch data')
-  }
-  return res.json()
-}
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function Home() {
+  const getLink = (path: string) => `${config.basePath}${path}`;
   const [en, setEn] = useState<any>(null)
   const [search, setSearch] = useState('')
   const [transLang, setTransLang] = useState<any>(null)
@@ -26,6 +21,14 @@ export default function Home() {
     }
     fetchData()
   }, [])
+
+  async function getData(path: string) {
+    const res = await fetch(getLink('/locales/' + path + '/common.json'))
+    if (!res.ok) {
+      throw new Error('Failed to fetch data')
+    }
+    return res.json()
+  }  
 
   const setSearchValue = (e: { target: { value: SetStateAction<string> } }) => {
     setSearch(e.target.value)
