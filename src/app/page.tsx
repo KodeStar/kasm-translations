@@ -9,13 +9,12 @@ function classNames(...classes: string[]) {
 }
 
 export default function Home() {
-  const getLink = (path: string) => `${config.basePath}${path}`;
+  const getLink = (path: string) => `${process.env.NEXT_PUBLIC_BASE}${path}`;
   const [en, setEn] = useState<any>(null)
   const [search, setSearch] = useState('')
   const [transLang, setTransLang] = useState<any>(null)
   const [currentTab, setCurrentTab] = useState('agents')
   useEffect(() => {
-    console.log(config)
     const fetchData = async () => {
       const data = await getData('en')
       setEn(data)
