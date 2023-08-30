@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, SetStateAction, ChangeEvent, JSXElementConstructor, Key, PromiseLikeOfReactNode, ReactElement, ReactNode, JSXElementConstructor, PromiseLikeOfReactNode, ReactElement, ReactNode } from 'react'
+import { useState, useEffect, SetStateAction, ChangeEvent, JSXElementConstructor, Key, PromiseLikeOfReactNode, ReactElement, ReactNode } from 'react'
 
 async function getData(path: string) {
   const res = await fetch('/locales/' + path + '/common.json')
@@ -15,9 +15,9 @@ function classNames(...classes: string[]) {
 }
 
 export default function Home() {
-  const [en, setEn] = useState(null)
-  const [search, setSearch] = useState(null)
-  const [transLang, setTransLang] = useState(null)
+  const [en, setEn] = useState<any>(null)
+  const [search, setSearch] = useState('')
+  const [transLang, setTransLang] = useState<any>(null)
   const [currentTab, setCurrentTab] = useState('agents')
   useEffect(() => {
     const fetchData = async () => {
@@ -27,7 +27,7 @@ export default function Home() {
     fetchData()
   }, [])
 
-  const setSearchValue = (e: { target: { value: SetStateAction<null> } }) => {
+  const setSearchValue = (e: { target: { value: SetStateAction<string> } }) => {
     setSearch(e.target.value)
   }
   const getLang = async () => {
@@ -41,7 +41,7 @@ export default function Home() {
   }
 
   const updateLang = (top: string, key: string, e: ChangeEvent<HTMLInputElement>) => {
-    if (typeof transLang === 'object') {
+    if (Object.keys(transLang).length > 0) {
       let current = {
         ...transLang
       }
@@ -63,19 +63,19 @@ export default function Home() {
             id="tabs"
             name="tabs"
             className="block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
-            defaultValue={tabs.find((tab: string) => tab === currentTab)}
+            defaultValue={tabs && tabs.find((tab: string) => tab === currentTab)}
           >
-            {tabs.map((tab: boolean | Key | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | PromiseLikeOfReactNode | null | undefined) => (
-              <option key={tab}>{tab}</option>
+            {tabs && tabs.map((tab: string | null | undefined) => (
+              <option key={tab || 'tab'}>{tab}</option>
             ))}
           </select>
         </div>
         <div className="hidden sm:block">
           <nav className="isolate flex flex-col divide-x divide-gray-200 rounded-lg shadow" aria-label="Tabs">
-            {tabs.map((tab: string | number | boolean | ((prevState: string) => string) | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | PromiseLikeOfReactNode | null | undefined, tabIdx: any) => (
+            {tabs && tabs.map((tab: string) => (
               <button
                 type="button"
-                key={tab}
+                key={tab || 'buttontab'}
                 onClick={() => setCurrentTab(tab)}
                 className={classNames(
                   tab === currentTab ? 'text-gray-900 bg-gray-100' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50 bg-white',
@@ -124,7 +124,7 @@ export default function Home() {
         </div>
         <div className='w-full flex-grow bg-gray-100 p-3'>
       {en && Object.keys(en).map(top => Object.keys(en[top]).map(key => (
-        <div className={classNames('flex flex-col bg-gray-50 mb-3 p-2 px-10', top === currentTab ? '' : 'hidden')}>
+        <div key={top + '.' + key} className={classNames('flex flex-col bg-gray-50 mb-3 p-2 px-10', top === currentTab ? '' : 'hidden')}>
           <div className='opacity-60 text-xs'>{en[top][key]}</div>
           {transLang && (
             <div className="relative mt-2">
