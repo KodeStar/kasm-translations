@@ -4,6 +4,9 @@
 /node_modules
 /.pnp
 .pnp.js
+/public/locales/node_modules
+public/locales/stats.js
+public/locales/README.md
 
 # testing
 /coverage
@@ -33,3 +36,4 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
