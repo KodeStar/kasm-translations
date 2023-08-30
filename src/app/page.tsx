@@ -15,6 +15,7 @@ export default function Home() {
   const [transLang, setTransLang] = useState<any>(null)
   const [currentTab, setCurrentTab] = useState('agents')
   useEffect(() => {
+    console.log(config)
     const fetchData = async () => {
       const data = await getData('en')
       setEn(data)
